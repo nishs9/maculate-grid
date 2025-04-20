@@ -45,7 +45,9 @@ USER nextjs
 
 EXPOSE 3000
 
+# Environment variables with defaults that work locally
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
+ENV NODE_ENV production
 
 CMD ["node", "server.js"] 
