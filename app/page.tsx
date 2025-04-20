@@ -31,11 +31,21 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
+    <main className="min-h-screen p-8 flex flex-col">
+      <div className="max-w-4xl mx-auto flex-grow">
         <h1 className="text-3xl font-bold mb-8">Maculate Grid</h1>
         <Grid rowTeams={rowTeams} colTeams={colTeams} />
       </div>
+      <footer className="mt-8 pb-4 text-center text-sm text-gray-500">
+        <a 
+          href="https://github.com/nishs9/maculate-grid" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:text-gray-700 underline"
+        >
+          Source Code (Github)
+        </a>
+      </footer>
     </main>
   );
 } 
