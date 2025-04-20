@@ -49,4 +49,5 @@ EXPOSE 3000
 ENV PORT 3000
 ENV NODE_ENV production
 
-CMD ["node", ".next/server/app/page.js"] 
+# Use the standalone server from .next/standalone
+CMD ["node", ".next/standalone/server.js"] 
