@@ -53,8 +53,19 @@ EXPOSE 8080
 # Make sure Railway and Next.js use the same port
 ENV PORT 8080
 
-# Create a debug script
-RUN echo "#!/bin/sh\necho 'Starting server with verbose logging'\necho 'Environment variables:'\nenv\necho 'Network interfaces:'\nip addr\necho 'Testing port availability:'\nnc -zv localhost 8080 || echo 'Port 8080 not in use'\necho 'Starting Next.js with debugging...'\nNODE_OPTIONS='--inspect' node --trace-warnings server.js" > /app/start.sh && chmod +x /app/start.sh
+# Create start-debug.sh directly in the image
+RUN echo '#!/bin/sh' > start-debug.sh && \
+    echo 'echo "====== ENVIRONMENT VARIABLES ======"' >> start-debug.sh && \
+    echo 'env | sort' >> start-debug.sh && \
+    echo 'echo "====== FILE LISTING ======"' >> start-debug.sh && \
+    echo 'ls -la' >> start-debug.sh && \
+    echo 'echo "====== NETWORK INFO ======"' >> start-debug.sh && \
+    echo 'ip addr || echo "ip command not found"' >> start-debug.sh && \
+    echo 'echo "====== PORT CHECK ======"' >> start-debug.sh && \
+    echo 'netstat -tulpn || echo "netstat command not found"' >> start-debug.sh && \
+    echo 'echo "====== STARTING SERVER ======"' >> start-debug.sh && \
+    echo 'exec node --trace-warnings server.js' >> start-debug.sh && \
+    chmod +x start-debug.sh
 
-# Start Next.js with verbose debugging
-CMD ["/app/start.sh"] 
+# Start with debugging
+CMD ["sh", "./start-debug.sh"] 
