@@ -12,6 +12,15 @@ const nextConfig = {
     }
     return config
   },
+  // Disable static optimization for API routes
+  rewrites: async () => {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig 
