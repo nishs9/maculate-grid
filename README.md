@@ -21,8 +21,6 @@ npm install
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the application.
-
 ## Database Setup
 
 The application uses SQLite for storing player data. There is a powershell script that you can run to setup the DB file. If you are not on windows, you can also just run the `setup_db.py` file. You can find the required python modules in `requirements.txt`:
