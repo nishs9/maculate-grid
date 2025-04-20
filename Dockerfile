@@ -33,7 +33,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Ensure public directory exists
-RUN mkdir -p public
+RUN mkdir -p app/public
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
