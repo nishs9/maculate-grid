@@ -45,10 +45,12 @@ USER nextjs
 
 EXPOSE 3000
 
-# Only set PORT, let Node.js handle the hostname binding
+# Next.js environment variables
 ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
 ENV NODE_ENV production
+# Ensure Next.js binds to all interfaces
+ENV HOSTNAME "0.0.0.0"
+ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 
-# The standalone server.js is copied to the root directory
-CMD ["sh", "-c", "HOST=0.0.0.0 node server.js"] 
+# Start the server explicitly binding to 0.0.0.0
+CMD ["node", "server.js"] 
