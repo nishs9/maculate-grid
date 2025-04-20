@@ -47,7 +47,8 @@ EXPOSE 3000
 
 # Only set PORT, let Node.js handle the hostname binding
 ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 ENV NODE_ENV production
 
 # The standalone server.js is copied to the root directory
-CMD ["node", "server.js"] 
+CMD ["sh", "-c", "HOST=0.0.0.0 node server.js"] 
