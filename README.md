@@ -2,21 +2,65 @@
 
 An Immaculate Grid clone built with Next.js and Typescript. This project was primarily just a way for me to play around with the new Cursor IDE. At the moment the database contains all QBs, RBs, WRs, and TEs since 1999.
 
-Try it out here: (maculate-grid-production.up.railway.app)[https://maculate-grid-production.up.railway.app]
+**Live Demo:** [maculate-grid-production.up.railway.app](https://maculate-grid-production.up.railway.app)
 
 ## Features
+
 - Interactive 3x3 grid interface
 - Real-time answer validation
+- Player search with autocomplete
+- Database containing QBs, RBs, WRs, and TEs since 1999
 
-## Upcoming Features
-- Rarity scoring system
-- Players from all positions
-- UI improvements (team logos, player headshots)
-- User stat tracking
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to see the application.
+
+## Database Setup
+
+The application uses SQLite for storing player data. There is a powershell script that you can run to setup the DB file. If you are not on windows, you can also just run the `setup_db.py` file. You can find the required python modules in `requirements.txt`:
+
+```bash
+# Windows
+./setup.ps1
+
+# Unix/Linux
+python setup_db.py
+```
+
+## Deployment
+
+The application is containerized with Docker:
+
+```bash
+# Build the Docker image
+docker build -t maculate-grid .
+
+# Run the container locally
+docker run -p 8080:8080 maculate-grid
+```
 
 ## Tech Stack
-- Next.js
-- Tailwind
-- Typescript
-- SQLite
-- Docker
+
+- **Frontend**: Next.js, React, TypeScript, Tailwind
+- **Backend**: Next.js API Routes
+- **Database**: SQLite
+- **Deployment**: Docker, Railway (for the live demo)
+
+## Upcoming Features
+
+- Rarity scoring system
+- Players from all positions
+- UI improvements (team logos, player headshots, etc.)
+- User stat tracking
+
+## License
+
+MIT
