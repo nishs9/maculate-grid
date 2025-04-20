@@ -29,37 +29,21 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Copy necessary files
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/nfl_stats.db ./
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# Copy output
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-# Install curl for healthcheck
-RUN apk add --no-cache curl
+# Simple port exposure - Railway prefers default ports
+EXPOSE 3000
 
-# Automatically leverage output traces to reduce image size
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/nfl_stats.db ./
+# Railway looks for PORT by default
+ENV PORT 3000
 
-USER nextjs
-
-# Ensure port is exposed correctly - Next.js is using 8080
-EXPOSE 8080
-
-# Railway configuration - PORT is what Railway uses to route traffic
-ENV PORT 8080
-# Next.js specific variables
-ENV NODE_ENV production
-ENV HOSTNAME "0.0.0.0"
-# Tell Railway to connect to port 8080
-ENV RAILWAY_DOCKERFILE_PORT 8080
-
-# Add healthcheck to help Railway detect when the server is ready
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/ || exit 1
-
-# Start the server explicitly binding to 0.0.0.0
+# Start Next.js simply
 CMD ["node", "server.js"] 
