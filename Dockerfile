@@ -28,6 +28,11 @@ WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
+# Enable verbose logging for Node.js and Next.js
+ENV DEBUG "*"
+ENV NODE_DEBUG "*"
+ENV NEXT_DEBUG "*"
+ENV NEXT_LOGGING_FILE "true" 
 
 # Copy necessary files
 COPY --from=builder /app/next.config.js ./
@@ -39,11 +44,17 @@ COPY --from=builder /app/nfl_stats.db ./
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Simple port exposure - Railway prefers default ports
-EXPOSE 3000
+# Install debugging tools
+RUN apk add --no-cache curl netcat-openbsd
 
-# Railway looks for PORT by default
-ENV PORT 3000
+# Match the port Next.js is actually using (from logs)
+EXPOSE 8080
 
-# Start Next.js simply
-CMD ["node", "server.js"] 
+# Make sure Railway and Next.js use the same port
+ENV PORT 8080
+
+# Create a debug script
+RUN echo "#!/bin/sh\necho 'Starting server with verbose logging'\necho 'Environment variables:'\nenv\necho 'Network interfaces:'\nip addr\necho 'Testing port availability:'\nnc -zv localhost 8080 || echo 'Port 8080 not in use'\necho 'Starting Next.js with debugging...'\nNODE_OPTIONS='--inspect' node --trace-warnings server.js" > /app/start.sh && chmod +x /app/start.sh
+
+# Start Next.js with verbose debugging
+CMD ["/app/start.sh"] 
