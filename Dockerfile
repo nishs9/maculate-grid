@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:18.17.1-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -36,6 +36,9 @@ RUN adduser --system --uid 1001 nextjs
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 # Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
@@ -43,14 +46,19 @@ COPY --from=builder --chown=nextjs:nodejs /app/nfl_stats.db ./
 
 USER nextjs
 
-EXPOSE 3000
+# Ensure port is exposed correctly - Next.js is using 8080
+EXPOSE 8080
 
-# Next.js environment variables
-ENV PORT 3000
+# Next.js environment variables - The port must match EXPOSE above
+ENV PORT 8080
 ENV NODE_ENV production
 # Ensure Next.js binds to all interfaces
 ENV HOSTNAME "0.0.0.0"
 ENV NEXT_SHARP_PATH=/app/node_modules/sharp
+
+# Add healthcheck to help Railway detect when the server is ready
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 
 # Start the server explicitly binding to 0.0.0.0
 CMD ["node", "server.js"] 
