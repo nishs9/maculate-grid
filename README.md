@@ -1,6 +1,6 @@
 # maculate-grid
 
-An Immaculate Grid clone built with Next.js and Typescript. This project was primarily just a way for me to play around with the Cursor IDE. At the moment the database contains all QBs, RBs, WRs, and TEs since 1999.
+An Immaculate Grid clone built with Next.js and Typescript. This project was primarily just a way for me to play around with the new Cursor IDE. At the moment the database contains all QBs, RBs, WRs, and TEs since 1999.
 
 Try it out here: (maculate-grid-production.up.railway.app)[https://maculate-grid-production.up.railway.app]
 
