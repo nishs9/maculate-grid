@@ -1,9 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { validatePlayerTeamsQuery, TEAM_ABBREVIATIONS } from '../../utils/queries';
 
-export async function POST(request: Request) {
+// Mark this route as dynamic
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export async function POST(request: NextRequest) {
   try {
     const { playerId, rowTeam, colTeam } = await request.json();
 

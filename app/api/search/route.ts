@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
+// Mark this route as dynamic
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const searchPlayersQuery = `
   WITH RankedPlayers AS (
     SELECT 
