@@ -49,5 +49,5 @@ EXPOSE 3000
 ENV PORT 3000
 ENV NODE_ENV production
 
-# Use the standalone server from .next/standalone
-CMD ["node", ".next/standalone/server.js"] 
+# The standalone server.js is copied to the root directory
+CMD ["node", "server.js"] 
