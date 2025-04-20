@@ -49,12 +49,13 @@ USER nextjs
 # Ensure port is exposed correctly - Next.js is using 8080
 EXPOSE 8080
 
-# Next.js environment variables - The port must match EXPOSE above
+# Railway configuration - PORT is what Railway uses to route traffic
 ENV PORT 8080
+# Next.js specific variables
 ENV NODE_ENV production
-# Ensure Next.js binds to all interfaces
 ENV HOSTNAME "0.0.0.0"
-ENV NEXT_SHARP_PATH=/app/node_modules/sharp
+# Tell Railway to connect to port 8080
+ENV RAILWAY_DOCKERFILE_PORT 8080
 
 # Add healthcheck to help Railway detect when the server is ready
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
